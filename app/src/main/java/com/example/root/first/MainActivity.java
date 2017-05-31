@@ -4,27 +4,30 @@ import android.content.Intent;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.widget.ProgressBar;
+
 import android.view.View;
 import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView ansView;
+
     EditText nameInput;
     EditText posInput;
     MyDBHandler dbHandler;
+    ProgressBar proBar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ansView = (TextView) findViewById(R.id.ansView);
+
         nameInput = (EditText)findViewById(R.id.nameInput);
         posInput = (EditText)findViewById(R.id.posInput);
         dbHandler = new MyDBHandler(this,null,null,1);
-        printDatabase();
+        proBar = (ProgressBar)findViewById(R.id.proBar);
+        proBar.setProgress(dbHandler.getCount());
 
     }
 
@@ -33,18 +36,15 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void printDatabase(){
-        String dbString = dbHandler.databaseToString();
-        ansView.setText(dbString);
-        nameInput.setText("");
-        posInput.setText("");
-    }
+
 
     public void addButtonClicked(View view){
         // dbHandler.add needs an object parameter.
         Player player = new Player(posInput.getText().toString(),nameInput.getText().toString());
         dbHandler.addPlayer(player);
-        printDatabase();
+        proBar.setProgress(dbHandler.getCount());
+        nameInput.setText("");
+        posInput.setText("");
     }
 
     //Delete items
@@ -52,7 +52,9 @@ public class MainActivity extends AppCompatActivity {
         // dbHandler delete needs string to find in the db
         String inputText = nameInput.getText().toString();
         dbHandler.deleteProduct(inputText);
-        printDatabase();
+        proBar.setProgress(dbHandler.getCount());
+        nameInput.setText("");
+        posInput.setText("");
     }
 }
 

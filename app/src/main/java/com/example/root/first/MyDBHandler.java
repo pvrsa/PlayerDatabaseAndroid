@@ -5,14 +5,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
 import android.content.Context;
 import android.content.ContentValues;
+import android.widget.ProgressBar;
 
 public class MyDBHandler extends SQLiteOpenHelper{
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "playerDB.db";
-    public static final String TABLE_PLAYERS = "players";
-    public static final String COLUMN_POS = "pos";
-    public static final String COLUMN_PLAYERNAME = "playername";
+    private static final String TABLE_PLAYERS = "players";
+    private static final String COLUMN_POS = "pos";
+    private static final String COLUMN_PLAYERNAME = "playername";
 
 
     public MyDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -48,28 +49,18 @@ public class MyDBHandler extends SQLiteOpenHelper{
         db.execSQL("DELETE FROM " + TABLE_PLAYERS + " WHERE " + COLUMN_PLAYERNAME + "=\"" + productName + "\";");
     }
 
-    public String databaseToString(){
-        String dbString = "";
+    public int getCount(){
         SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_PLAYERS + " WHERE 1";// why not leave out the WHERE  clause?
 
-        //Cursor points to a location in your results
-        Cursor recordSet = db.rawQuery(query, null);
-        //Move to the first row in your results
-        recordSet.moveToFirst();
+        String query = "SELECT * FROM " + TABLE_PLAYERS + " WHERE 1";
+        Cursor c = db.rawQuery(query,null);
+        int x = c.getCount();
+        c.close();
+        return x;
 
-        //Position after the last row means the end of the results
-        while (!recordSet.isAfterLast()) {
-            // null could happen if we used our empty constructor
-            if (recordSet.getString(recordSet.getColumnIndex("playername")) != null) {
-                dbString += recordSet.getString(recordSet.getColumnIndex("playername"));
-                dbString += "\n";
-            }
-            recordSet.moveToNext();
-        }
-        db.close();
-        return dbString;
+
     }
+
 
     public String[] printList(){
 
@@ -82,6 +73,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
         c.moveToFirst(); int i=0;
 
 
+
         while (!c.isAfterLast()) {
             if (c.getString(c.getColumnIndex("playername")) != null) {
                 String lala = c.getString(c.getColumnIndex("playername"));
@@ -92,7 +84,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
             c.moveToNext();
         }
         db.close();
-
+        c.close();
         return a;
     }
 
