@@ -5,15 +5,16 @@
     android:weightSum="1">
 
     <SearchView
-        android:layout_marginTop="20dp"
         android:id="@+id/searchView"
         android:layout_width="match_parent"
-        android:layout_height="65dp" />
+        android:layout_height="65dp"
+        android:layout_marginTop="20dp"
+        android:elevation="9dp" />
 
     <ListView
         android:id="@+id/anotherListView"
         android:layout_width="match_parent"
-        android:layout_height="434dp" />
+        android:layout_height="match_parent" />
 
 
 </LinearLayout>
