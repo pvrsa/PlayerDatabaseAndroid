@@ -3,28 +3,41 @@ package com.example.root.first;
 import android.app.Activity;
 
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
+
 import android.widget.SearchView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class AnotherList extends Activity {
 
     MyDBHandler dbHandler;
-    ArrayAdapter adapter;
+
+    RecyclerView rv;
+    List<String> players;
+    RVAdapter rvAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
+        setContentView(R.layout.activity_recycler);
         dbHandler = new MyDBHandler(this,null,null,1);
 
-        String[] playersNames = dbHandler.printList();
-        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,playersNames);
-        ListView listView  = (ListView) findViewById(R.id.anotherListView);
-        listView.setAdapter(adapter);
 
+        rv = (RecyclerView)findViewById(R.id.rv);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        rv.setLayoutManager(llm);
+
+        String[] playersNames = dbHandler.printList();
+        players = new ArrayList<>(Arrays.asList(playersNames));
+
+        rvAdapter = new RVAdapter(players,players.size());
+        rv.setAdapter(rvAdapter);
 
         SearchView s = (SearchView)findViewById(R.id.searchView);
 
@@ -38,7 +51,6 @@ public class AnotherList extends Activity {
 
                     @Override
                     public boolean onQueryTextChange(String newText) {
-                        AnotherList.this.adapter.getFilter().filter(newText);
                         return false;
                     }
                 }
