@@ -68,6 +68,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
         SQLiteDatabase db = getWritableDatabase();
 
         String query = "SELECT * FROM " + TABLE_PLAYERS + " WHERE 1";
+
         Cursor c = db.rawQuery(query,null);
         String[] a = new String[c.getCount()];
         c.moveToFirst(); int i=0;

@@ -36,7 +36,7 @@ public class AnotherList extends Activity {
         String[] playersNames = dbHandler.printList();
         players = new ArrayList<>(Arrays.asList(playersNames));
 
-        rvAdapter = new RVAdapter(players,players.size());
+        rvAdapter = new RVAdapter(players);
         rv.setAdapter(rvAdapter);
 
         SearchView s = (SearchView)findViewById(R.id.searchView);
@@ -51,6 +51,7 @@ public class AnotherList extends Activity {
 
                     @Override
                     public boolean onQueryTextChange(String newText) {
+                        rvAdapter.filter(newText);
                         return false;
                     }
                 }

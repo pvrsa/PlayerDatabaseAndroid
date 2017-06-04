@@ -16,6 +16,7 @@ import java.util.List;
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> {
 
 
+
     public static class PersonViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
         TextView pname;
@@ -31,13 +32,24 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
 
 
 
-    List<String> players ;
+    private List<String> players;
+    private List<String> fPlayers;
 
-    int count;
 
-    public RVAdapter(List<String> players,int count) {
+    public RVAdapter(List<String> players) {
         this.players = players;
-        this.count = count;
+        this.fPlayers = players;
+    }
+
+
+    public void filter(String newText) {
+        fPlayers = new ArrayList<>();
+        for (String lala : players){
+            if(lala.toLowerCase().contains(newText.toLowerCase())){
+                fPlayers.add(lala);
+            }
+        }
+        notifyDataSetChanged();
     }
 
 
@@ -51,7 +63,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
 
     @Override
     public void onBindViewHolder(PersonViewHolder holder, int position) {
-        holder.pname.setText(players.get(position));
+        holder.pname.setText(fPlayers.get(position));
         holder.ppos.setText("lala");
 
     }
@@ -59,7 +71,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
     @Override
     public int getItemCount() {
 
-        return count;
+        return fPlayers.size();
     }
 
     @Override
